@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>Wastewater Treatment Controller</title>
+</head>
+<body>
+    <h2 title="Title">Wastewater Treatment Controller</h2>
+    <table>
+      <tr>
+        <th class="tabhead">Values</th>
+      </tr>
+    </table>
+    <table>
+      <tr>
+        <td class="tabcell">Water Level</td>
+        <td class="tabcell"><span id="depth" class="depth">...</span> mm</td>
+      </tr>
+      <tr>
+        <td class="tabcell">Temperature</td>
+        <td class="tabcell"><span id="temperature" class="temperature">...</span> °C</td>
+      </tr>
+      <tr>
+        <td class="tabcell">WiFi Signal</td>
+        <td class="tabcell"><span id="wifiSignal" class="wifiSignal">...</span> dB</td>
+      </tr>
+      <tr>
+        <td class="tabcell">Hardware</td>
+        <td class="tabcell"><span id="hardware" class="hardware">...</span></td>
+      </tr>
+      <tr>
+        <td class="tabcell">Software</td>
+        <td class="tabcell"><span id="software" class="software">...</span></td>
+      </tr>    
+    </table>
+    <table>
+      <tr>
+        <th class="tabhead">Controls</th>
+      </tr>
+    </table>
+    <table>
+      <tr>
+        <td class="tabcell"><button id="setTime" class="button green">Set Time</button></td>
+        <td class="tabcell"><button id="clearLog" class="button green">Clear Log</button></td>
+      </tr>
+      <tr>
+		<td class="tabcell"><button id="drain" class="button green">Drain</button></td>
+        <td class="tabcell"><button id="clean" class="button">Clean</button></td>
+      </tr>
+    </table>
+    <table>
+      <tr>
+        <th class="tabhead">Inputs</th>
+      </tr>
+    </table>
+	<table>
+		<tr>
+			<td class="tabcell">Drain Valve:</td>
+			<td class="tabcell"><div id="IN1" class="red-led"></div></td>
+		</tr>
+		<tr>
+			<td class="tabcell">Cleaning Valve:</td>
+			<td class="tabcell"><div id="IN2" class="red-led"></div></td>
+		</tr>
+		<tr>
+			<td class="tabcell">Catchment Tank:</td>
+			<td class="tabcell"><div id="IN3" class="red-led"></div></td>
+		</tr>
+		<tr>
+			<td class="tabcell">Input 4:</td>
+			<td class="tabcell"><div id="IN4" class="red-led"></div></td>
+		</tr>
+	</table>
+	<table>
+      <tr>
+		<th class="tabhead">Outputs</th>
+      </tr>
+    </table>
+	<table>
+      <tr>
+        <td class="tabcell">Drain Valve:</td>
+        <td class="tabcell"><div id="OUT1" class="red-led"></div></td>
+      </tr>
+      <tr>
+        <td class="tabcell">Cleaning Valve:</td>
+        <td class="tabcell"><div id="OUT2" class="red-led"></div></td>
+      </tr>
+	  <tr>
+        <td class="tabcell">Heating:</td>
+        <td class="tabcell"><div id="OUT3" class="red-led"></div></td>
+      </tr>
+	  <tr>
+        <td class="tabcell">Output 4:</td>
+        <td class="tabcell"><div id="OUT4" class="red-led"></div></td>
+      </tr>
+	 </table>
+
+    <script>
+        const ws = new WebSocket('ws://192.168.1.100/ws'); // Replace with your server address
+
+        ws.onopen = () => {
+            console.log('WebSocket connection established.');
+            ws.send(JSON.stringify({ com: 'gv', sta: true })); // Request initial values
+        };
+
+        ws.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+
+            // Update values
+            if (data.te !== undefined) document.getElementById('temperature').innerText = data.te;
+            if (data.de !== undefined) document.getElementById('depth').innerText = data.de;
+            if (data.wi !== undefined) document.getElementById('wifiSignal').innerText = data.wi;
+            if (data.ha !== undefined) document.getElementById('hardware').innerText = data.ha;
+            if (data.so !== undefined) document.getElementById('software').innerText = data.so;
+
+            // Update "clean" button
+            const cleanButton = document.getElementById('clean');
+            if (data.cl !== undefined) {
+                cleanButton.innerText = data.cl ? 'Clean' : 'Recirculate';
+                cleanButton.style.backgroundColor = data.cl ? '#228B22' : '#50FF50';
+                cleanButton.onclick = () => ws.send(JSON.stringify({ com: 'cl', sta: !data.cl }));
+            }
+
+            // Update "drain" button
+            const drainButton = document.getElementById('drain');
+            if (data.fl !== undefined) {
+				drainButton.style.backgroundColor = data.fl ? '#FF5050' : '#50FF50';
+				drainButton.disabled = data.fl;
+            }
+
+            // Update inputs (ip)
+            if (data.ip !== undefined) {
+                data.ip.forEach((state, index) => {
+                    const inputElement = document.getElementById(`IN${index + 1}`);
+                    inputElement.className = state ? 'green-led' : 'red-led';
+                });
+            }
+
+            // Update outputs (ou)
+            if (data.ou !== undefined) {
+                data.ou.forEach((state, index) => {
+                    const outputElement = document.getElementById(`OUT${index + 1}`);
+                    outputElement.className = state ? 'green-led' : 'red-led';
+                });
+            }
+        };
+
+        ws.onclose = () => {
+            console.log('WebSocket connection closed.');
+        };
+
+        ws.onerror = (error) => {
+            console.error('WebSocket error:', error);
+        };
+
+        // Button event listeners
+        document.getElementById('setTime').addEventListener('click', () => {
+            ws.send(JSON.stringify({ com: 'nt', sta: true }));
+        });
+
+        document.getElementById('clearLog').addEventListener('click', () => {
+            ws.send(JSON.stringify({ com: 'dl', sta: true }));
+        });
+
+        document.getElementById('drain').addEventListener('click', () => {
+            ws.send(JSON.stringify({ com: 'dr', sta: true }));
+        });
+    </script>
+
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        table {
+		border-collapse: collapse;
+		width:400px;
+		margin-left:auto;
+		margin-right:auto;
+		}
+        .tabhead {
+			width: 200px;
+			padding: 5px;
+			background-color: #0043af;
+			color: white;
+		}
+		.tabcell {
+			width: 200px;
+			border: none;
+			padding: 5px;
+			background-color: #CEF6F5;
+		}
+        .button {
+            width: 120px;
+            height: 30px;
+            padding: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            color: white;
+        }
+        .button:hover {
+            opacity: 0.8;
+        }
+        .button.green {
+            background-color: #50FF50;
+        }
+        .red-led {
+            width: 20px;
+            height: 20px;
+            background-color: red;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .green-led {
+            width: 20px;
+            height: 20px;
+            background-color: green;
+            border-radius: 50%;
+            display: inline-block;
+        }
+    </style>
+</body>
+</html>
