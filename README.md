@@ -2,7 +2,7 @@
 
 # Description
 
-This project involves a control unit with an ESP32 microcontroller that manages a small wastewater treatment plant. It is powered by 24 V AC. A LM2596 DC/DC converter is used to provide 3.3V/DC for the processor and other components. USB communication is handled by an FT232 chip, and the MCP79410 with a CR2032 battery is selected for RTC. The control unit has 4 inputs and 4 outputs. Temperature measurement is implemented using a DS18B20 sensor connected to the Thermo input, and level measurement is done with an EARU pressure sensor. Each activity is logged to the SD Card and these logs can be retrieved via the "Čisticka" application. The device connects via WiFi to a home network, allowing control through a WebSocket server. The website is stored on SD card and is also accessible within the home network. The circuit schematic and PCB design can be downloaded from the website: [https://oshwlab.com](https://oshwlab.com/bobobo007/cisticka-_v06-001) (copy the link int new window)
+This project involves a control unit with an ESP32 microcontroller that manages a small wastewater treatment plant. It is powered by 24 V AC. A LM2596 DC/DC converter is used to provide 3.3V/DC for the processor and other components. USB communication is handled by an FT232 chip, and the MCP79410 with a CR2032 battery is selected for RTC. The control unit has 4 inputs and 4 outputs. Temperature measurement is implemented using a DS18B20 sensor connected to the Thermo input, and level measurement is done with an EARU pressure sensor. Each activity is logged to the SD card and these logs can be retrieved via the "Čisticka" application. The device connects via WiFi to a home network, allowing control through a WebSocket server. The website is stored on SD card and is also accessible within the home network. The circuit schematic and PCB design can be downloaded from the website: [https://oshwlab.com](https://oshwlab.com/bobobo007/cisticka-_v06-001) (copy the link int new window)
 
 ![PCB](https://github.com/user-attachments/assets/32259623-8603-4f0c-9ad5-117dca7c9e11)
 
@@ -57,7 +57,7 @@ Compiled with Arduino IDE v2.3.4.
 
 6. In Arduino IDE, go to `Tools -> Board` and select `ESP32 Dev Module`.
 
-7. Compile and upload the project to the ESP32. If everything is set up correctly, you can access the website stored in SPIFFS by entering the IP address in a browser.
+7. Compile and upload the project to the ESP32. If everything is set up correctly, you can access the website stored on SD card by entering the IP address in a browser.
    
 ![WebPage](https://github.com/user-attachments/assets/04ccbc9e-d84a-4eab-9c57-5cead834c2de)
 
