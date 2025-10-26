@@ -113,6 +113,7 @@ Example:
  "ou":[false,false,false,false]
 }
 
+
 🗂 Log File Format
 
 Stored on SD card: data.txt
