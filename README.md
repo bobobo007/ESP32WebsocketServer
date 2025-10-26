@@ -114,49 +114,62 @@ Example:
 }
 ```
 
-🗂 Log File Format
+---
+
+## 🗂 Log File Format
 
 Stored on SD card: data.txt
 
+```
 ID, Type(N/W/E),
 Date, Time,
 TempValve, TempPCB,
 WaterLevel, Inputs, Outputs,
 Message
+```
 
 Example:
 
+```
 116,W,2025-10-26,06:13:29,23.40,28.94,845,0000,0000,Start
+```
 
 Android app displays last 50 entries
-⚙️ Setup
 
-1️⃣ Configure WiFi in source code:
+---
 
+## ⚙️ Setup
+
+### 1️⃣ Configure WiFi in source code:
+
+```
 const char* ssid = "YourWiFi";
 const char* password = "Password123";
+```
 
-2️⃣ Set static IP in:
+### 2️⃣ Set static IP in:
 
     WiFiComm.cpp
 
-    SPIFFS/data/index.html
+### 3️⃣ Copy webpage to SD Card
 
-3️⃣ Upload webpage via ESP32 Sketch Data Upload
+  www/index.html
 
-4️⃣ Build with:
+### 4️⃣ Build with:
 
-    Arduino IDE 2.3.4+
+    Arduino IDE 2.3.6+
 
     Board: ESP32 Dev Module
 
-5️⃣ Install Android APK
+### 5️⃣ Install Android APK
 
     Set server URL:
-
+```
 ws://192.168.1.89/ws
+```
+---
 
-📚 Used Libraries
+## 📚 Used Libraries
 Library	Version
 OneWire	2.3.8
 DallasTemperature	4.0.3
@@ -167,11 +180,11 @@ SD	1.3.0
 FatFS	4.0.0
 ESPAsyncWebServer	3.7.7
 AsyncTCP	3.4.1
-✅ License
+## ✅ License
 
 MIT License.
 Free to use, modify and distribute.
-👤 Author
+## 👤 Author
 
 Bohus
 GitHub: https://github.com/bobobo007
