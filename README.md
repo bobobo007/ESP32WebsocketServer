@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/logo.png" width="200">
+  <img src="docs/logo.png" width="220">
 </p>
 
 <h1 align="center">ESP32 Wastewater Treatment Controller</h1>
@@ -10,55 +10,50 @@ WebSocket • Android App • WiFi • SD Logging • PCB & Web UI
 
 ---
 
-## ✔️ Overview
+## 📌 Project Overview
 
-This project provides a complete hardware & software solution for controlling a compact **wastewater treatment system** using an **ESP32** microcontroller.  
-The controller monitors and automates draining, recirculation, water level, heating, and system safety.
+This project implements a smart control unit for a compact **wastewater treatment system** using an **ESP32** microcontroller.  
+The controller automates draining, recirculation, temperature control, and system safety while logging operational data to SD card.
 
 It can be fully controlled using:
-- ✅ Android application (WebSocket client)
-- ✅ Integrated ESP32 Webpage (SPIFFS)
+- ✅ Android mobile application (WebSocket client)
+- ✅ Integrated ESP32 Webpage (stored in SPIFFS)
 
-PCB project at OSHWLab:  
+PCB & schematic:  
 🔗 https://oshwlab.com/bobobo007/cisticka-_v06-001
-
-Main firmware repository:  
-🔗 https://github.com/bobobo007/ESP32WebsocketServer
 
 ---
 
 ## ✨ Features
 
-| Category | Description |
-|---------|-------------|
-| Connectivity | WiFi, WebSocket Server |
-| Control Modes | Recirculation, Cleaning, Manual draining |
-| Data Logging | SD card automatic logging |
-| Temperature Sensors | Valve temperature + PCB temperature |
-| Level Measurement | Pressure-based EARU sensor |
-| Inputs | 4 digital inputs (tank states, valve feedback…) |
-| Outputs | 4 controlled outputs (valves, heating) |
-| Local UI | Responsive website stored in SPIFFS |
-| Mobile App | Android application included |
-| RTC Clock | MCP79410 + CR2032 backup |
+| Category | Details |
+|---------|---------|
+| Connectivity | WiFi + WebSocket Server |
+| Sensors | Valve temp + PCB temp + water level |
+| Control | Cleaning / Recirculation + drain valve |
+| RTC | MCP79410 + CR2032 backup battery |
+| I/O | 4 inputs + 4 outputs |
+| Data Logging | microSD card (FatFS) |
+| Local UI | Webpage hosted on ESP32 |
+| Mobile UI | Android application |
 
 ---
 
-## 🖥 Screenshots (Android App)
+## 📱 Android Application UI
 
 <p align="center">
-  <img src="docs/screen_main.jpg" width="270">  
-  <img src="docs/screen_info.jpg" width="270">  
-  <img src="docs/screen_log.jpg" width="270">  
+  <img src="docs/screen_main.jpg" width="260">  
+  <img src="docs/screen_info.jpg" width="260">  
+  <img src="docs/screen_log.jpg" width="260">
 </p>
 
 <p align="center">
-  <img src="docs/screen_settings.jpg" width="270">
+  <img src="docs/screen_settings.jpg" width="260">
 </p>
 
 ---
 
-## 🌐 Web Interface (SPIFFS)
+## 🖥 Web User Interface
 
 <p align="center">
   <img src="docs/web_main.jpg" width="550">
@@ -66,45 +61,48 @@ Main firmware repository:
 
 ---
 
-## 🧠 System Architecture
+## 🧠 Hardware Architecture
 
-| Component | Type | Notes |
-|----------|------|------|
-| MCU | ESP32 | WebSocket communication & control |
-| Power | 24V AC → LM2596 → 3.3V DC | Stabilized processor supply |
-| RTC | MCP79410 | Backup battery CR2032 |
-| USB Interface | FT232 | Firmware & debugging |
-| SD Card | microSD | Event logging (FatFS) |
-| Sensors | DS18B20 (2×), EARU pressure | Temperature & level |
-| I/O | 4 inputs / 4 outputs | Valves + heaters |
+| Component | Description |
+|----------|-------------|
+| MCU | ESP32 |
+| Power | 24V AC → LM2596 → 3.3V DC |
+| RTC | MCP79410 |
+| USB Interface | FT232 |
+| Storage | microSD |
+| Temp Sensors | DS18B20 (x2) |
+| Level Sensor | EARU pressure measurement |
+| IO | 4 inputs, 4 outputs |
 
 PCB Rendering:
 
 <p align="center">
-  <img src="docs/pcb_render.jpg" width="600">
+  <img src="docs/pcb_render.jpg" width="550">
 </p>
 
 ---
 
-## 🔄 WebSocket Protocol
+## 🔌 WebSocket Commands
 
-### Client → Server commands
+### Client → Server
 
-| Command | Function | Example |
-|--------|----------|---------|
-| `hb` | Heartbeat every 3s | `{"com":"hb"}` |
-| `gv` | Get current values | `{"com":"gv","sta":true}` |
-| `cl` | Cleaning/Recirc mode | `{"com":"cl","sta":true}` |
-| `dr` | Open drain valve | `{"com":"dr","sta":true}` |
+| Command | Purpose | Example |
+|--------|---------|---------|
+| `hb` | Heartbeat | `{"com":"hb"}` |
+| `gv` | Get values | `{"com":"gv","sta":true}` |
+| `cl` | Cleaning / Recirculation | `{"com":"cl","sta":true}` |
+| `dr` | Drain valve open | `{"com":"dr","sta":true}` |
 | `st` | Set time from phone | `{"com":"st","time":"yyyy-MM-dd'T'HH:mm:ssXXX"}` |
-| `nt` | Sync time via NTP | `{"com":"nt","sta":true}` |
-| `sl` | Send log data | `{"com":"sl","sta":true}` |
-| `dl` | Delete log | `{"com":"dl","sta":true}` |
+| `nt` | Sync NTP time | `{"com":"nt","sta":true}` |
+| `sl` | Send log file | `{"com":"sl","sta":true}` |
+| `dl` | Delete log file | `{"com":"dl","sta":true}` |
 | `ou` | Set output state | `{"com":"ou1","sta":true}` |
 
 ---
 
-### Server → Client values example
+### Server → Client
+
+Example:
 
 ```json
 {
@@ -114,3 +112,65 @@ PCB Rendering:
  "ip":[false,false,false,false],
  "ou":[false,false,false,false]
 }
+
+🗂 Log File Format
+
+Stored on SD card: data.txt
+
+ID, Type(N/W/E),
+Date, Time,
+TempValve, TempPCB,
+WaterLevel, Inputs, Outputs,
+Message
+
+Example:
+
+116,W,2025-10-26,06:13:29,23.40,28.94,845,0000,0000,Start
+
+Android app displays last 50 entries
+⚙️ Setup
+
+1️⃣ Configure WiFi in source code:
+
+const char* ssid = "YourWiFi";
+const char* password = "Password123";
+
+2️⃣ Set static IP in:
+
+    WiFiComm.cpp
+
+    SPIFFS/data/index.html
+
+3️⃣ Upload webpage via ESP32 Sketch Data Upload
+
+4️⃣ Build with:
+
+    Arduino IDE 2.3.4+
+
+    Board: ESP32 Dev Module
+
+5️⃣ Install Android APK
+
+    Set server URL:
+
+ws://192.168.1.89/ws
+
+📚 Used Libraries
+Library	Version
+OneWire	2.3.8
+DallasTemperature	4.0.3
+ArduinoJson	7.3.0
+NTPClient	2.3.1
+RTClib	2.1.4
+SD	1.3.0
+FatFS	4.0.0
+ESPAsyncWebServer	3.7.7
+AsyncTCP	3.4.1
+✅ License
+
+MIT License.
+Free to use, modify and distribute.
+👤 Author
+
+Bohus
+GitHub: https://github.com/bobobo007
