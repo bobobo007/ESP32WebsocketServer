@@ -164,30 +164,32 @@ const char* password = "Password123";
 ### 5️⃣ Install Android APK
 
     Set server URL:
-```
+
 ws://192.168.1.89/ws
-```
+
 ---
 
 ## 📚 Used Libraries
 
 | Library | Version | Adress |
 |--------|---------|---------|
-| OneWire	| 2.3.8 | https://www.pjrc.com/teensy/td_libs_OneWire.html|
+| OneWire	| 2.3.8 | https://www.pjrc.com/teensy/td_libs_OneWire.html |
+| DallasTemperature |	4.0.3 |  |
+| ArduinoJson |	7.3.0 |  |
+| NTPClient | 2.3.1 |  |
+| RTClib |	2.1.4 |  |
+| SD |	1.3.0 |  |
+| FatFS |	4.0.0|  |
+| ESPAsyncWebServer |	3.7.7 |  |
+| AsyncTCP |	3.4.1 |  |
 
-
-DallasTemperature	4.0.3
-ArduinoJson	7.3.0
-NTPClient	2.3.1
-RTClib	2.1.4
-SD	1.3.0
-FatFS	4.0.0
-ESPAsyncWebServer	3.7.7
-AsyncTCP	3.4.1
+---
 ## ✅ License
 
 MIT License.
 Free to use, modify and distribute.
+
+---
 ## 👤 Author
 
 Bohus
