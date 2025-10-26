@@ -112,3 +112,8 @@ Example:
  "ip":[false,false,false,false],
  "ou":[false,false,false,false]
 }
+
+---
+## 🗂 Log File Format
+
+Stored on SD card: data.txt
