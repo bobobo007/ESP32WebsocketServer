@@ -112,7 +112,7 @@ Example:
  "ip":[false,false,false,false],
  "ou":[false,false,false,false]
 }
-
+...
 
 🗂 Log File Format
 
