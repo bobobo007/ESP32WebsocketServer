@@ -113,10 +113,11 @@ Example:
  "ou":[false,false,false,false]
 }
 
-🗂 Log File Format
+### 🗂 Log File Format
 
 Stored on SD card: data.txt
 
+```mathematica
 ID, Type(N/W/E),
 Date, Time,
 TempValve, TempPCB,
@@ -125,6 +126,7 @@ Message
 
 Example:
 
+```makefile
 116,W,2025-10-26,06:13:29,23.40,28.94,845,0000,0000,Start
 
 Android app displays last 50 entries
