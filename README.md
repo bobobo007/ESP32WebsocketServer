@@ -151,7 +151,7 @@ const char* password = "Password123";
 
     WiFiComm.cpp
 
-### 3️⃣ Copy webpage to SD Card
+### 3️⃣ Copy webpage to SD Card:
 
   www/index.html
 
@@ -170,8 +170,12 @@ ws://192.168.1.89/ws
 ---
 
 ## 📚 Used Libraries
-Library	Version
-OneWire	2.3.8
+
+| Library | Version | Adress |
+|--------|---------|---------|
+| OneWire	| 2.3.8 | https://www.pjrc.com/teensy/td_libs_OneWire.html|
+
+
 DallasTemperature	4.0.3
 ArduinoJson	7.3.0
 NTPClient	2.3.1
